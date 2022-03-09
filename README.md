@@ -1,1 +1,1 @@
-# humanit-s-num-rique
+# humanités-numrique
