@@ -3,10 +3,10 @@
 
 2-Ajouter les bases de donnes
 
-3-Les dossiers
+3-Les dossiers:
 
-  i-Dossier de pagination: il faut ajouter la bases de données 'a' est executer le program
+       i-Dossier de pagination: il faut ajouter la bases de données 'a' est executer le program
   
-  ii-téléversement : la version1 est pour le but d'ajouter des photo dans un dossier,donc pour l'executer il faut ajouter un dossier "photo" et ajouter la bases de données fichiers.sql, et executer le program
+       ii-téléversement : la version1 est pour le but d'ajouter des photo dans un dossier,donc pour l'executer il faut ajouter un dossier "photo" et ajouter la bases de            données fichiers.sql, et executer le program
   
   
