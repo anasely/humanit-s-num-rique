@@ -17,10 +17,10 @@
         $lesextension = ["png", "jpeg", "jpg", "pjpeg"];
 
         //Récupérer l'extension du fichier importé
-        $extension = pathinfo($nom, PATHINFO_EXTENSION);
+        $type = pathinfo($nom, PATHINFO_EXTENSION);
 
         //Vérifier l'extension du fichier
-        if(in_array($extension, $lesextension)) {
+        if(in_array($type, $lesextension)) {
             
             //Vérifier la taille du fichier
             if($size > $maxsize) {
@@ -37,8 +37,8 @@
                     if(move_uploaded_file($_FILES['fichier']['tmp_name'], "photo/". $_FILES['fichier']['name'])) {
                         $query = "INSERT INTO fichiers (nom, type, path, size) VALUES (?, ?, ?, ?)";
                         $statement = $pdo->prepare($query);
-                        $statement->execute(array($nom, $extension, $path, $size));
-                        echo "Le téléchargement ok";
+                        $statement->execute(array($nom, $type, $path, $size));
+                        echo "upload ok";
                     } 
                     else {
                         die("Le téléchargement a échoué");
