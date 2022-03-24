@@ -20,10 +20,10 @@ function explorerDir($path)
 	//obtenir le nom de chaque entrée soit fichier ou dossier
 	while($entree = readdir($folder))
 	{		
-		//"."c'est le dossier en cours et ".." c'est le dossier precedent donc Si le nom de l'entrée ne commence pas par "."  ou ".."
+		//"."c'est le dossier en cours et ".." c'est le dossier precedent donc Si le nom de l'entrée ne commence pas par "."  ou ".." On ignore les entrées
 		if($entree != "." && $entree != "..")
 		{
-			//l'entrer est un dossier
+			//On vérifie si il s'agit d'un dossier  
 			if(is_dir($path."/".$entree))
 			{
 				echo '<div class="folder"><b>' . $entree . '</b> c est un DOSSIER  </div>';
@@ -31,14 +31,14 @@ function explorerDir($path)
 				$sav_path = $path;
 				//passer le path docs avec le dossier en cours (docs/...)
 				$path .= "/".$entree;
-				//fonction pour parcourir le sous dossier en cours			
+				//fonction pour parcourir le sous dossier en cours, on parcours le nouveau répertoire			
 				explorerDir($path);
 				//
 				$path = $sav_path;
 			}
 			else
 			{
-			//l'entrer est un fichier
+			//l'entrer est un fichier 
 				echo '<li>' . $entree . ' <b>c est un Fichier</b> </li>';
 				//obtenir le path du fichier en cours
 				$path_source = $path."/".$entree;				
