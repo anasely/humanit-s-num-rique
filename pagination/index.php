@@ -70,6 +70,8 @@ $result = $conn->query($sql);
             <th>ID</th>
             <th>Nom</th>
             <th>Téléphone</th>
+
+
         </thead>
         <tbody>
             <?php
@@ -80,6 +82,7 @@ $result = $conn->query($sql);
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['name'] ?></td>
                     <td><?= $row['phone'] ?></td>
+
                 </tr>
             <?php
             }

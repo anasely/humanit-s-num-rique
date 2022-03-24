@@ -2,9 +2,20 @@
     // verification de l'importation de fichier
     if(isset($_FILES['fichier'])) {
         // Connexion à la bdd
-        $pdo = new PDO('mysql:host=localhost;dbname=tps_php', 'root', 'root');
-        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         $servername = 'localhost';
+            $username = 'root';
+            $password = 'root';
+            $dbname='tps_php';
+            
+            //On établit la connexion
+            $conn = new mysqli($servername, $username, $password,$dbname);
+            
+            //On vérifie la connexion
+            if($conn->connect_error){
+                die('Erreur : ' .$conn->connect_error);
+            }
+            
+
        
         // Récupérer les info du fichier importé        
         $nom = $_FILES['fichier']['name'];
@@ -35,9 +46,15 @@
 
                     //Déplacer le fichier vers le dossier photo
                     if(move_uploaded_file($_FILES['fichier']['tmp_name'], "photo/". $_FILES['fichier']['name'])) {
-                        $query = "INSERT INTO fichiers (nom, type, path, size) VALUES (?, ?, ?, ?)";
-                        $statement = $pdo->prepare($query);
-                        $statement->execute(array($nom, $type, $path, $size));
+                        $sql = "INSERT INTO fichiers"." (nom, type, path, size)"." VALUES "."('$nom','$type ','$path','$size')";
+                        if ($conn->query($sql)==TRUE) {
+                             echo "";
+                           }else {
+                              
+                            echo "Error: ".$sql."<br>".$conn->error;
+                           }
+                    $conn->close();
+                        
                         echo "upload ok";
                     } 
                     else {
