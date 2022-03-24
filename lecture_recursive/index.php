@@ -26,7 +26,7 @@ function explorerDir($path)
 			//l'entrer est un dossier
 			if(is_dir($path."/".$entree))
 			{
-				echo '<div class="folder"><b>' . $entree . '</b> c est un DOSSIER </br> </div>';
+				echo '<div class="folder"><b>' . $entree . '</b> c est un DOSSIER  </div>';
 				//obtenir le path du dossier en cours
 				$sav_path = $path;
 				//passer le path docs avec le dossier en cours (docs/...)
