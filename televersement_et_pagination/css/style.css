@@ -1,0 +1,48 @@
+body {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+h2 {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.pagina {
+  display: inline-block;
+  padding: 10px;
+}
+
+.pagina a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: 0.9s;
+  border: 1px solid #ddd;
+  margin: 0 5px;
+}
+
+.pagina a.active {
+  background-color: black;
+  color: white;
+}
+
+.pagina a:hover:not(.active) {
+  background-color: #ddd;
+}
+
+.images-block {
+  width: 50%;
+  height: 500px;
+  display: flow-root;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-right: auto;
+}
+
+.images-block img {
+  margin: 50px;
+  width: 20%;
+  height: 20%;
+}
