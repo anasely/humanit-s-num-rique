@@ -30,33 +30,53 @@
     $result = $pdo->prepare($query2);
     $result->execute(array($debut, $nb_fichiers_page));
     $page_rows = $result->fetchAll();
+    //requete pour la supprimer les photos
+    if (isset($_GET['id'])) {
+    $query3 = "DELETE FROM fichiers WHERE id = ?";
+    $result2 = $pdo->prepare($query3);
+    $result2->execute(array($_GET['id']));
+    header('Location: admin.php');
+    }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="css/style.css" />
-        <title>Pagination par images</title>
+        <link rel="stylesheet" href="style.css" >
+        <title>Pagination par images et suppression</title>
     </head>
     <body>
+
+        <h3><a href="recursive.php">lecture_recursive</a></h3>
+        <h3><a href="deconnecter.php" >Deconnécter</h3>
         <center>
             <form action="code.php" method="POST" enctype="multipart/form-data">
                 <input type="file" name="fichier" id="file">
                 <input type="submit" value="submit" name="submit"/>
             </form>
         </center>
-        <h2>les images telecharger </h2>
-        <center>
-                <div class="images-block">
-                    <?php if(count($page_rows) > 0) {
-                        foreach($page_rows as $row) {
-                            echo '<img src=' . $row['path'] .'>';
-                        }
-                    }
-                    ?>
+    <div class="images">
+        <h2>Liste des images</h2>
+        <div class="images-block">
+            <?php
+            $a =  1;//variable pour passer a la ligne 
+            if (count($page_rows) > 0) {
+                foreach ($page_rows as $row) {
+                      $a = $a+1;//incrementation de variable
+                      if ($a % 2 == 0) echo '<br/>';//chaque fois on passe a la deuxieme ligne 
+                    echo '<div class="image"> 
+                        <a href="?id=' . $row['id'] . '">delete</a>
+                        <img src=' . $row['path'] .'>
+                    </div>';
+                }
+            }
+            ?>
+        </div>
 
-                </div>
+                
         </center>
     </body>
     <center>
@@ -78,5 +98,6 @@
         if($page != $nb_pages && $nb_pages != 0) echo '<a href="?page='.($page+1).'">&raquo;</a>';
         ?>
     </footer>
+   
 </center>
 </html>

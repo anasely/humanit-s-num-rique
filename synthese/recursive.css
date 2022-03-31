@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  font-size: 1rem;
+  background: #fafbed;
+}
+
+
+li {
+  padding-left: 1em;
+  border: 1px solid red;
+  border-width: 1px 0px 1px 1px;
+}
+
+
+
