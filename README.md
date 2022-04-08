@@ -12,5 +12,7 @@
        iii- téléversement avec pagination ;
        
        iiii- synthese de tout le projet : apres l'execution vous allez voir une page de connexion le user : root et password: root 
+       
+                      user : root et password: root 
   
   
