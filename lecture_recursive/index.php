@@ -1,88 +1,90 @@
-<P>
-<B>DEBUTTTTTT DU PROCESSUS :</B>
-<BR>
-<?php echo " ", date ("h:i:s"); ?>
-</P>
-<?php
+-<!DOCTYPE html>
+<html lang="en">
 
-//l'expiration du script apres 500 secondes
-set_time_limit (500);
-$path= "docs";
+<head>
+    <meta charset="UTF-8">
+    <title>lecture recursive</title>
+</head>
 
-//pour parcourir le repertoire indiqué (docs)
-explorerDir($path);
+<body>
+    <div class="links">
+    </div>
+    <div class="t">
+        <?php
+        // Fixer le temps d'expiration du script après 500 secondes
+        set_time_limit(500);
+        $path = "docs";
+        echo '<p class="parent"><i class="fa fa-folder-open"></i> Docs </p>';
+        // Appeler la fonction pour la première fois pour parcourir le répértoire docs
+        explorerDir($path);
 
-function explorerDir($path)
-{
-	//ouvrir "docs"
-	$folder = opendir($path);
-	
-	//obtenir le nom de chaque entrée soit fichier ou dossier
-	while($entree = readdir($folder))
-	{		
-		//"."c'est le dossier en cours et ".." c'est le dossier precedent donc Si le nom de l'entrée ne commence pas par "."  ou ".." On ignore les entrées
-		if($entree != "." && $entree != "..")
-		{
-			//On vérifie si il s'agit d'un dossier  
-			if(is_dir($path."/".$entree))
-			{
-				echo '<div class="folder"><b>' . $entree . '</b> c est un DOSSIER  </div>';
-				//obtenir le path du dossier en cours
-				$sav_path = $path;
-				//passer le path docs avec le dossier en cours (docs/...)
-				$path .= "/".$entree;
-				//fonction pour parcourir le sous dossier en cours, on parcours le nouveau répertoire			
-				explorerDir($path);
-				//
-				$path = $sav_path;
-			}
-			else
-			{
-			//l'entrer est un fichier 
-				echo '<li>' . $entree . ' <b>c est un Fichier</b> </li>';
-				//obtenir le path du fichier en cours
-				$path_source = $path."/".$entree;				
-				
-				//Si c'est un .png ou un .jpeg		
-				//Alors je ferais quoi ? Devinez !
-				//...
-				// Récupérer le type de la photo
-					$extension = pathinfo($entree, PATHINFO_EXTENSION);
-					//Recuperer size de photo
-					$size = filesize($path_source);
-					$lesextension = ["png", "jpg"];
+        function explorerDir($path)
+        {
+            echo '<ul>';
+            // Ouvrir le répertoire
+            $folder = opendir($path);
 
-					//Si c'est un .png ou un .jpeg		
-					if (in_array($extension, $lesextension)) {
+            // Récupérer le nom de chaque entrée du dossier (fichier ou dossier)
+            // Tant qu'on a une entrée la boucle ne s'arrête pas jusqu'au dernier élément
+            while ($entree = readdir($folder)) {
+                // Si le nom de l'entrée n'est pas "." qui veut dire le dossier courant ou ".." le dossier précédent
+                if ($entree != "." && $entree != "..") {
 
-						// Connexion à la base de données
-							 $servername = 'localhost';
-          					 $username = 'root';
-			           		 $password = 'root';
-	    			         $dbname='tps_php';
-					            
-					            //On établit la connexion
-					         $conn = new mysqli($servername, $username, $password,$dbname);
-					            
-					            //On vérifie la connexion
-					            if($conn->connect_error){
-					                die('Erreur : ' .$conn->connect_error);
+                    // Si l'entrée est un dossier
+                    if (is_dir($path . "/" . $entree)) {
+                        echo '<li class="container"> <p><i class="fa fa-folder-open"></i> ' . $entree . '</p>';
 
+                        // Récupérer le chemin du dossier courant
+                        $sav_path = $path;
+
+                        // Concaténer le chemin du dossier docs avec le celui du dossier courant (exemple : docs/dir1)
+                        $path .= "/" . $entree;
+
+                        // Appeler la fonction pour parcourir le sous-dossier courant	
+                        explorerDir($path);
+
+                        // Affecter au path le chemin du dossier parent du dossier courant (c'est-à-dire revenir vers l'arrière)
+                        $path = $sav_path;
+                    }
+                    // Si l'entrée est un fichier
+                    else {
+                        if (pathinfo($entree, PATHINFO_EXTENSION) == 'jpg' || pathinfo($entree, PATHINFO_EXTENSION) == 'png') {
+                            echo '<li class="container"><p><i class="fa fa-picture-o" aria-hidden="true"></i> ' . $entree . '</p>';
+                        } elseif (pathinfo($entree, PATHINFO_EXTENSION) == 'htm') {
+                            echo '<li class="container"><p><i class="fa fa-code" aria-hidden="true"></i> ' . $entree . '</p>';
+                        } elseif (pathinfo($entree, PATHINFO_EXTENSION) == 'txt') {
+                            echo '<li class="container"><p><i class="fa fa-file-text-o" aria-hidden="true"></i> ' . $entree . '</p>';
+                        }
+                        // Récupérer le chemin complet du fichier courant
+                        $path_source = $path . "/" . $entree;
+
+                        // Récupérer l'extension et la taille de l'image
+                        $extension = pathinfo($entree, PATHINFO_EXTENSION);
+                        $size = filesize($path_source);
+                        $accepted_extensions = ["png", "jpeg", "jpg", "pjpeg"];
+
+                        // Vérifier si le fichier est une image		
+                        if (in_array($extension, $accepted_extensions)) {
+
+                            // Connexion à la base de données
+                            $pdo = new PDO('mysql:host=localhost;dbname=tps_php', 'root', 'root');
+                            $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                            // Insertion des informations de l'image dans la base de données
+                            $query =  "INSERT INTO fichiers (nom, type, path, size) VALUES (?, ?, ?, ?)";
+                            $statement = $pdo->prepare($query);
+                            $statement->execute(array($entree, $extension, $path_source, $size));
+                        }
+                    }
+                }
             }
+            closedir($folder);
+            echo '</ul>';
+        }
+        ?>
+    </div>
 
-						$sql =  "INSERT INTO fichiers"." (nom, type, path, size)"." VALUES "."('$entree','$extension ','$path_source','$size')";
+</body>
 
-						$statement = $conn->query($sql);
-					}
-				}
-			}
-		}
-		closedir($folder);
-	}
-?>
-<P>
-<B>FINNNNNN DU PROCESSUS :</B>
-<BR>
-<?php echo " ", date ("h:i:s"); ?>
-</P>
-	
+</html>
