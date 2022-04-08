@@ -39,6 +39,7 @@ h2 {
   width: 900px;
   margin: auto;
   padding: 10px;
+  border: dashed;
 }
 
 .images .images-block .image {
